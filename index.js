@@ -27,12 +27,13 @@ function(request, response) {
     //i've got a token! make the tweet
     var twitterHelper = new TwitterHelper(request.sessionDetails.accessToken);
     var yoMommaHelper = new YoMommaDataHelper();
-    var joke = yoMommaHelper.getJoke()
-    twitterHelper.postTweet(joke).then(function(result) {
+
+    yoMommaHelper.getJoke().then(function(data) {
+      twitterHelper.postTweet(data.joke).then(function(result) {
         console.log(result);
         response.say('I\'ve posted the status to your timeline').send();
-      }
-    );
+      });
+    });
     return false
   }
 });
@@ -44,8 +45,15 @@ skill.intent('tellJoke', {
   function(request, response) {
     var reprompt = 'Ask me about a fact about your mother.';
     var yoMommaHelper = new YoMommaDataHelper();
-    var joke = yoMommaHelper.getJoke()
-    response.say('Here is a fact about your mother: ' + joke).send();
+    yoMommaHelper.getJoke().then(function(data) {
+      console.log(data.joke);
+      response.say("Here is a fact about your mother: " + data.joke).send();
+    }).catch(function(err) {
+      console.log(err.statusCode);
+      var prompt = 'Something wen\'t wrong, yo.';
+      response.say(prompt).reprompt(reprompt).shouldendsession(false).send();
+    });
+    return false
   }
 );
 
