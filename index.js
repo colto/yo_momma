@@ -13,7 +13,7 @@ skill.launch(function(request, response) {
 
 skill.intent('tweetJoke', {
   'slots': {},
-  'utterances': ['tweet {|joke|fact} {|about} {|yo} {|momma|mother|mom}']
+  'utterances': ['tweet {|a} {|joke|fact} {|about} {|my|your|yo} {|momma|mother|mom}']
 },
 function(request, response) {
   console.log('session details', request.sessionDetails);
@@ -40,7 +40,7 @@ function(request, response) {
 
 skill.intent('tellJoke', {
   'slots': {},
-  'utterances': ['tell {|joke|fact} {|about} {|my|your|yo} {|momma|mother|mom}']
+  'utterances': ['tell {|me} {|a} {|joke|fact} {|about} {|my|your|yo} {|momma|mother|mom}']
 },
   function(request, response) {
     var reprompt = 'Ask me about a fact about your mother.';
@@ -51,16 +51,16 @@ skill.intent('tellJoke', {
     }).catch(function(err) {
       console.log(err.statusCode);
       var prompt = 'Something wen\'t wrong, yo.';
-      response.say(prompt).reprompt(reprompt).shouldendsession(false).send();
+      response.say(prompt).reprompt(reprompt).shouldEndSession(false).send();
     });
     return false
   }
 );
 
 skill.intent('AMAZON.HelpIntent', function (request, response) {
-  var speechOutput = "You can say tell me a yo momma joke, tweet a yo momma joke, or, you can say exit... What can I help you with?";
+  var speechOutput = "You can say tell me a yo momma joke, or, you can say exit... What can I help you with?";
   var reprompt = "What can I help you with?";
-  response.ask(speechOutput).reprompt(reprompt).shouldendsession(false).send();
+  response.say(speechOutput).reprompt(reprompt).shouldEndSession(false).send();
 });
 
 skill.intent('AMAZON.CancelIntent', function (request, response) {
